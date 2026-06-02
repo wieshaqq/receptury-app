@@ -105,7 +105,7 @@ h1 span {
 ========================= */
 .menu {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 8px;
     margin-bottom: 20px;
 }
@@ -583,4 +583,184 @@ h3 {
     .button-group .btn-danger {
         grid-column: span 2;
     }
+}
+
+/* =========================
+   SPLASH SCREEN
+========================= */
+#splash {
+    position: fixed;
+    inset: 0;
+    background: var(--bg-base);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+#splash.hidden {
+    display: flex;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.splash-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    animation: splashIn 0.5s ease;
+}
+
+@keyframes splashIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.splash-icon {
+    font-size: 48px;
+    margin-bottom: 4px;
+}
+
+.splash-title {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+}
+
+.splash-title span {
+    color: var(--accent);
+}
+
+.splash-spinner {
+    margin-top: 8px;
+}
+
+.spinner {
+    width: 28px;
+    height: 28px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.splash-text {
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+}
+
+/* =========================
+   BUTTON LOADING STATE
+========================= */
+button.loading {
+    opacity: 0.7;
+    pointer-events: none;
+    position: relative;
+}
+
+button.loading::before {
+    content: '';
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    margin-right: 8px;
+    vertical-align: middle;
+    opacity: 0.8;
+}
+
+/* =========================
+   SCAN VIEW
+========================= */
+.scan-drop-zone {
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-lg);
+    padding: 36px 20px;
+    text-align: center;
+    background: var(--bg-elevated);
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.scan-drop-zone:hover {
+    border-color: rgba(0, 229, 160, 0.3);
+    background: var(--accent-glow-sm);
+}
+
+.scan-icon {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+.scan-label {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--text-primary);
+}
+
+.scan-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+#scanStatus {
+    margin-top: 16px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    text-align: center;
+    min-height: 20px;
+}
+
+#scanStatus.error {
+    color: var(--red);
+}
+
+#scanStatus.success {
+    color: var(--accent);
+}
+
+/* =========================
+   SKELETON LOADER
+========================= */
+.skeleton {
+    background: linear-gradient(
+        90deg,
+        var(--bg-elevated) 25%,
+        var(--bg-input) 50%,
+        var(--bg-elevated) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+    border-radius: var(--radius-sm);
+    height: 14px;
+}
+
+@keyframes shimmer {
+    from { background-position: 200% 0; }
+    to   { background-position: -200% 0; }
+}
+
+.skeleton-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 10px;
+    padding: 11px 10px;
+    border-bottom: 1px solid var(--border-subtle);
 }

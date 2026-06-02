@@ -7,7 +7,20 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="container">
+
+<!-- ========================= SPLASH SCREEN ========================== -->
+<div id="splash">
+    <div class="splash-inner">
+        <div class="splash-icon">⚗️</div>
+        <div class="splash-title">Recepty<span>lab</span></div>
+        <div class="splash-spinner">
+            <div class="spinner"></div>
+        </div>
+        <div class="splash-text">Ładowanie receptur...</div>
+    </div>
+</div>
+
+<div class="container" id="app" style="display:none">
 
     <!-- HEADER -->
     <header class="app-header">
@@ -20,6 +33,7 @@
         <button onclick="pokazWidok('kalkulator')">Kalkulator</button>
         <button onclick="pokazWidok('edytor')">Edytor</button>
         <button onclick="pokazWidok('nowa')">Nowa</button>
+        <button onclick="pokazWidok('skan')">📷 Skan</button>
     </div>
 
     <!-- ========================= WIDOK: KALKULATOR ========================== -->
@@ -87,7 +101,24 @@
         </div>
     </div>
 
+    <!-- ========================= WIDOK: SKAN AI (placeholder) ========================== -->
+    <div id="widok-skan" class="widok hidden">
+        <div class="widok-title">Skan receptury</div>
+        <div class="scan-drop-zone" id="scanDropZone">
+            <div class="scan-icon">📷</div>
+            <div class="scan-label">Zrób zdjęcie lub wgraj plik</div>
+            <div class="scan-sub">JPG, PNG — maks. 5MB</div>
+            <input type="file" id="scanInput" accept="image/*" capture="environment" style="display:none">
+            <button class="btn-primary" onclick="document.getElementById('scanInput').click()" style="margin-top:16px">
+                Wybierz zdjęcie
+            </button>
+        </div>
+        <div id="scanStatus"></div>
+        <div id="scanPodglad"></div>
+    </div>
+
 </div>
+
 <script src="script.js"></script>
 </body>
 </html>

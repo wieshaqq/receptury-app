@@ -19,18 +19,14 @@ async function init() {
     const zapisaneBazowe  = localStorage.getItem(STORAGE_BAZOWE);
 
     if (zapisaneRobocze && zapisaneBazowe) {
-        // Dane już istnieją — użyj ich
         receptury       = JSON.parse(zapisaneRobocze);
         recepturyBazowe = JSON.parse(zapisaneBazowe);
     } else {
-        // Pierwsze uruchomienie — załaduj defaults z pliku JSON
         try {
             const response = await fetch("defaultRecipes.json");
             const defaults = await response.json();
-
             receptury       = JSON.parse(JSON.stringify(defaults));
             recepturyBazowe = JSON.parse(JSON.stringify(defaults));
-
             zapiszDoPamieci();
         } catch (e) {
             console.error("Nie można załadować defaultRecipes.json", e);
@@ -43,6 +39,45 @@ async function init() {
     pokazEdytor();
     przelicz();
     pokazWidok("kalkulator");
+
+    // Schowaj splash, pokaż app
+    const splash = document.getElementById("splash");
+    const app    = document.getElementById("app");
+    splash.classList.add("hidden");
+    app.style.display = "block";
+}
+
+/* =========================
+   BUTTON LOADING HELPERS
+========================= */
+function setLoading(btn, loading) {
+    if (loading) {
+        btn.dataset.originalText = btn.textContent;
+        btn.textContent = "Ładowanie...";
+        btn.classList.add("loading");
+    } else {
+        btn.textContent = btn.dataset.originalText || btn.textContent;
+        btn.classList.remove("loading");
+    }
+}
+
+/* =========================
+   SKELETON LOADER
+========================= */
+function pokazSkeleton(rows = 5) {
+    let html = "";
+    for (let i = 0; i < rows; i++) {
+        const w1 = 60 + Math.floor(Math.random() * 30);
+        const w2 = 50 + Math.floor(Math.random() * 30);
+        html += `
+            <div class="skeleton-row">
+                <div class="skeleton" style="width:${w1}%"></div>
+                <div class="skeleton" style="width:${w2}%"></div>
+                <div class="skeleton" style="width:40%"></div>
+            </div>
+        `;
+    }
+    document.getElementById("wynik").innerHTML = `<div style="margin-top:16px">${html}</div>`;
 }
 
 /* =========================
@@ -396,7 +431,7 @@ function zmienProdukt(zrodlo) {
    NAWIGACJA
 ========================= */
 function pokazWidok(widok) {
-    ["kalkulator", "edytor", "nowa"].forEach(w => {
+    ["kalkulator", "edytor", "nowa", "skan"].forEach(w => {
         document.getElementById(`widok-${w}`).classList.add("hidden");
     });
 
@@ -405,7 +440,7 @@ function pokazWidok(widok) {
     const buttons = document.querySelectorAll(".menu button");
     buttons.forEach(b => b.classList.remove("active"));
 
-    const index = ["kalkulator", "edytor", "nowa"].indexOf(widok);
+    const index = ["kalkulator", "edytor", "nowa", "skan"].indexOf(widok);
     if (index >= 0) buttons[index].classList.add("active");
 }
 
