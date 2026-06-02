@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator receptur</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+    <!-- HEADER -->
+    <header class="app-header">
+        <div class="app-header-icon">⚗️</div>
+        <h1>Recepty<span>lab</span></h1>
+    </header>
+
+    <!-- MENU -->
+    <div class="menu">
+        <button onclick="pokazWidok('kalkulator')">Kalkulator</button>
+        <button onclick="pokazWidok('edytor')">Edytor</button>
+        <button onclick="pokazWidok('nowa')">Nowa</button>
+    </div>
+
+    <!-- ========================= WIDOK: KALKULATOR ========================== -->
+    <div id="widok-kalkulator" class="widok">
+        <div class="widok-title">Przelicznik</div>
+
+        <label class="field-label">Receptura</label>
+        <div class="select-wrap">
+            <select id="produkt" onchange="zmienProdukt('kalkulator')"></select>
+        </div>
+
+        <label class="field-label">Docelowa masa (kg)</label>
+        <input type="number" id="iloscKg" placeholder="np. 35" oninput="przelicz()">
+
+        <div id="wynik"></div>
+    </div>
+
+    <!-- ========================= WIDOK: EDYTOR ========================== -->
+    <div id="widok-edytor" class="widok hidden">
+        <div class="widok-title">Edytor receptury</div>
+
+        <label class="field-label">Receptura</label>
+        <div class="select-wrap">
+            <select id="produktEdytor" onchange="zmienProdukt('edytor')"></select>
+        </div>
+
+        <div id="edytor"></div>
+        <div id="sumaReceptury"></div>
+
+        <div class="add-section">
+            <div class="add-section-title">Dodaj składnik</div>
+            <div class="add-row">
+                <input type="text" id="edytorNowySkladnik" placeholder="Nazwa składnika">
+                <input type="number" id="edytorNowaIlosc" placeholder="Ilość">
+            </div>
+            <button onclick="dodajSkladnikEdytor()" class="btn-primary" style="width:100%">+ Dodaj składnik</button>
+        </div>
+
+        <div class="button-group">
+            <button onclick="zapiszRecepture()">Zapisz zmiany</button>
+            <button onclick="zapiszJakoBazowa()" class="btn-base">Zapisz jako bazową</button>
+            <button onclick="przywrocRecepture()" class="btn-warning">Przywróć do bazowej</button>
+            <button onclick="usunRecepture()" class="btn-danger">Usuń recepturę</button>
+        </div>
+    </div>
+
+    <!-- ========================= WIDOK: NOWA RECEPTURA ========================== -->
+    <div id="widok-nowa" class="widok hidden">
+        <div class="widok-title">Nowa receptura</div>
+
+        <label class="field-label">Nazwa receptury</label>
+        <input type="text" id="nowaReceptura" placeholder="np. Szampon Lawendowy">
+        <button onclick="dodajRecepture()" class="btn-primary" style="width:100%">Utwórz recepturę</button>
+
+        <div id="podgladNowejReceptury"></div>
+        <div id="sumaNowejReceptury"></div>
+
+        <div class="add-section">
+            <div class="add-section-title">Dodaj składnik</div>
+            <div class="add-row">
+                <input type="text" id="nowySkladnik" placeholder="Nazwa składnika">
+                <input type="number" id="nowaIlosc" placeholder="Ilość">
+            </div>
+            <button onclick="dodajSkladnikNowejReceptury()" class="btn-primary" style="width:100%">+ Dodaj składnik</button>
+        </div>
+    </div>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,586 @@
+/* =========================
+   CSS VARIABLES
+========================= */
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap');
+
+:root {
+    --bg-base:        #0e0f11;
+    --bg-surface:     #16181c;
+    --bg-elevated:    #1e2128;
+    --bg-input:       #252830;
+    --border:         #2e3138;
+    --border-subtle:  #232630;
+    --accent:         #00e5a0;
+    --accent-dim:     #00c488;
+    --accent-glow:    rgba(0, 229, 160, 0.12);
+    --accent-glow-sm: rgba(0, 229, 160, 0.06);
+    --text-primary:   #eef0f4;
+    --text-secondary: #8a8f9e;
+    --text-muted:     #555b6b;
+    --red:            #e05252;
+    --red-dim:        #c43c3c;
+    --red-bg:         rgba(224, 82, 82, 0.08);
+    --yellow:         #f0a832;
+    --yellow-dim:     #d49020;
+    --yellow-bg:      rgba(240, 168, 50, 0.08);
+    --blue:           #4a9eff;
+    --blue-dim:       #3a8ee0;
+    --blue-bg:        rgba(74, 158, 255, 0.08);
+    --radius-sm:      8px;
+    --radius-md:      14px;
+    --radius-lg:      20px;
+    --font-display:   'Rajdhani', sans-serif;
+    --font-body:      'Inter', sans-serif;
+    --transition:     0.18s ease;
+}
+
+/* =========================
+   RESET & BASE
+========================= */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-base);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.5;
+    min-height: 100vh;
+    padding: 16px 14px 40px;
+    /* subtle noise texture */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+}
+
+.container {
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto;
+}
+
+/* =========================
+   HEADER
+========================= */
+.app-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.app-header-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--accent-glow);
+    border: 1px solid rgba(0, 229, 160, 0.2);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+h1 {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+    line-height: 1;
+}
+
+h1 span {
+    color: var(--accent);
+}
+
+/* =========================
+   MENU
+========================= */
+.menu {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.menu button {
+    padding: 12px 8px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background-color: var(--bg-surface);
+    color: var(--text-secondary);
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.menu button::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background: var(--accent);
+    transition: width 0.2s ease;
+    border-radius: 2px;
+}
+
+.menu button:hover {
+    background-color: var(--bg-elevated);
+    color: var(--text-primary);
+    border-color: var(--border);
+}
+
+.menu button.active {
+    background-color: var(--accent-glow);
+    border-color: rgba(0, 229, 160, 0.3);
+    color: var(--accent);
+}
+
+.menu button.active::after {
+    width: 40%;
+}
+
+/* =========================
+   WIDOKI
+========================= */
+.widok {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.hidden {
+    display: none;
+}
+
+/* =========================
+   LABELS
+========================= */
+.field-label {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    margin-top: 16px;
+    display: block;
+}
+
+.field-label:first-child {
+    margin-top: 0;
+}
+
+/* =========================
+   INPUTY & SELECT
+========================= */
+input,
+select {
+    width: 100%;
+    padding: 12px 14px;
+    margin-bottom: 4px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background-color: var(--bg-input);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 15px;
+    transition: var(--transition);
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+input:focus,
+select:focus {
+    border-color: rgba(0, 229, 160, 0.4);
+    background-color: var(--bg-elevated);
+    box-shadow: 0 0 0 3px var(--accent-glow-sm);
+}
+
+input::placeholder {
+    color: var(--text-muted);
+}
+
+/* Custom select arrow */
+.select-wrap {
+    position: relative;
+}
+
+.select-wrap::after {
+    content: '▾';
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
+    font-size: 12px;
+}
+
+/* =========================
+   PRZYCISKI — BASE
+========================= */
+button {
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background-color: var(--bg-elevated);
+    color: var(--text-primary);
+    cursor: pointer;
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: var(--transition);
+    white-space: nowrap;
+}
+
+button:hover {
+    background-color: #2a2e38;
+    border-color: #3e4452;
+}
+
+button:active {
+    transform: scale(0.97);
+}
+
+/* =========================
+   BUTTON GROUP
+========================= */
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+.button-group button {
+    width: 100%;
+    padding: 13px;
+    font-size: 13px;
+}
+
+.btn-primary {
+    background-color: var(--accent-glow);
+    border-color: rgba(0, 229, 160, 0.25);
+    color: var(--accent);
+}
+
+.btn-primary:hover {
+    background-color: rgba(0, 229, 160, 0.18);
+    border-color: rgba(0, 229, 160, 0.4);
+}
+
+.btn-base {
+    background-color: var(--blue-bg);
+    border-color: rgba(74, 158, 255, 0.2);
+    color: var(--blue);
+}
+
+.btn-base:hover {
+    background-color: rgba(74, 158, 255, 0.15);
+    border-color: rgba(74, 158, 255, 0.35);
+}
+
+.btn-warning {
+    background-color: var(--yellow-bg);
+    border-color: rgba(240, 168, 50, 0.2);
+    color: var(--yellow);
+}
+
+.btn-warning:hover {
+    background-color: rgba(240, 168, 50, 0.15);
+    border-color: rgba(240, 168, 50, 0.35);
+}
+
+.btn-danger {
+    background-color: var(--red-bg);
+    border-color: rgba(224, 82, 82, 0.2);
+    color: var(--red);
+}
+
+.btn-danger:hover {
+    background-color: rgba(224, 82, 82, 0.15);
+    border-color: rgba(224, 82, 82, 0.35);
+}
+
+/* =========================
+   SEKCJA DODAJ SKŁADNIK
+========================= */
+.add-section {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.add-section-title {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+}
+
+.add-row {
+    display: grid;
+    grid-template-columns: 1fr 90px;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.add-row input {
+    margin-bottom: 0;
+}
+
+/* =========================
+   TABELA WYNIKÓW
+========================= */
+#wynik {
+    margin-top: 20px;
+}
+
+.wynik-header {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 4px;
+}
+
+.wynik-nazwa {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    color: var(--text-primary);
+}
+
+.wynik-meta {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+}
+
+.wynik-meta span {
+    color: var(--accent);
+    font-weight: 500;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead tr {
+    border-bottom: 1px solid var(--border);
+}
+
+th {
+    font-family: var(--font-display);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 8px 10px;
+    text-align: left;
+}
+
+td {
+    padding: 11px 10px;
+    font-size: 14px;
+    border-bottom: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+tbody tr:hover td {
+    background-color: var(--accent-glow-sm);
+}
+
+td:nth-child(2) {
+    font-weight: 500;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+}
+
+td:nth-child(3) {
+    color: var(--text-secondary);
+    font-variant-numeric: tabular-nums;
+}
+
+.wynik-suma {
+    margin-top: 14px;
+    padding: 12px 14px;
+    background: var(--accent-glow-sm);
+    border: 1px solid rgba(0, 229, 160, 0.12);
+    border-radius: var(--radius-md);
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--accent);
+    text-align: right;
+}
+
+/* =========================
+   EDYTOR — SKŁADNIK ROW
+========================= */
+#edytor {
+    margin-top: 4px;
+}
+
+.skladnik-row {
+    display: grid;
+    grid-template-columns: 1fr 100px 36px;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.skladnik-row span {
+    font-size: 14px;
+    color: var(--text-primary);
+    padding: 0 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.skladnik-row input {
+    margin: 0;
+    padding: 10px 12px;
+    font-size: 14px;
+    text-align: right;
+}
+
+.skladnik-row button {
+    padding: 0;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--red-bg);
+    border-color: rgba(224, 82, 82, 0.15);
+    color: var(--red);
+    font-size: 14px;
+    border-radius: var(--radius-sm);
+    flex-shrink: 0;
+}
+
+.skladnik-row button:hover {
+    background-color: rgba(224, 82, 82, 0.18);
+    border-color: rgba(224, 82, 82, 0.3);
+}
+
+/* =========================
+   SUMA RECEPTURY
+========================= */
+#sumaReceptury {
+    margin-top: 12px;
+    padding: 10px 14px;
+    border-radius: var(--radius-md);
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-align: right;
+}
+
+/* =========================
+   PODGLĄD NOWEJ RECEPTURY
+========================= */
+#podgladNowejReceptury {
+    margin-top: 12px;
+}
+
+#podgladNowejReceptury .skladnik-row span:last-child {
+    color: var(--text-secondary);
+    font-size: 13px;
+    text-align: right;
+}
+
+#sumaNowejReceptury {
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    text-align: right;
+    padding-right: 4px;
+}
+
+/* =========================
+   WIDOK HEADINGS
+========================= */
+.widok-title {
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+h3 {
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 20px 0 10px;
+}
+
+/* =========================
+   DESKTOP TWEAKS
+========================= */
+@media (min-width: 701px) {
+    body {
+        padding: 28px 20px 60px;
+    }
+
+    .button-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .button-group .btn-danger {
+        grid-column: span 2;
+    }
+}
