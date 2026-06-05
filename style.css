@@ -764,3 +764,110 @@ button.loading::before {
     padding: 11px 10px;
     border-bottom: 1px solid var(--border-subtle);
 }
+
+/* =========================
+   TEXTAREA
+========================= */
+textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background-color: var(--bg-input);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.6;
+    resize: vertical;
+    outline: none;
+    transition: var(--transition);
+    margin-bottom: 4px;
+}
+
+textarea:focus {
+    border-color: rgba(0, 229, 160, 0.4);
+    background-color: var(--bg-elevated);
+    box-shadow: 0 0 0 3px var(--accent-glow-sm);
+}
+
+textarea::placeholder {
+    color: var(--text-muted);
+}
+
+/* =========================
+   NOTATKI
+========================= */
+.notatka-row {
+    display: grid;
+    grid-template-columns: 1fr 36px;
+    gap: 8px;
+    align-items: start;
+    padding: 10px 12px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    margin-bottom: 8px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.notatka-row button {
+    padding: 0;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--red-bg);
+    border-color: rgba(224, 82, 82, 0.15);
+    color: var(--red);
+    font-size: 12px;
+    border-radius: var(--radius-sm);
+    flex-shrink: 0;
+}
+
+.notatki-empty {
+    font-size: 13px;
+    color: var(--text-muted);
+    padding: 8px 0;
+}
+
+/* =========================
+   KALKULATOR — PROCES I NOTATKI
+========================= */
+.kalk-sekcja {
+    margin-top: 20px;
+    padding: 16px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+}
+
+.kalk-sekcja-title {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+}
+
+.kalk-tekst {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-primary);
+    white-space: pre-wrap;
+}
+
+.kalk-notatka {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.kalk-notatka:last-child {
+    border-bottom: none;
+}

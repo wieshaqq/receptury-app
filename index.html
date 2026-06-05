@@ -12,7 +12,7 @@
 <div id="splash">
     <div class="splash-inner">
         <div class="splash-icon">⚗️</div>
-        <div class="splash-title">Przeroboo<span>fka</span></div>
+        <div class="splash-title">Przero<span>boofka</span></div>
         <div class="splash-spinner">
             <div class="spinner"></div>
         </div>
@@ -25,7 +25,7 @@
     <!-- HEADER -->
     <header class="app-header">
         <div class="app-header-icon">⚗️</div>
-        <h1>Przeroboo<span>fka</span></h1>
+        <h1>Przero<span>boofka</span></h1>
     </header>
 
     <!-- MENU -->
@@ -49,6 +49,7 @@
         <input type="number" id="iloscKg" placeholder="np. 35" oninput="przelicz()">
 
         <div id="wynik"></div>
+        <div id="procesWidok"></div>
     </div>
 
     <!-- ========================= WIDOK: EDYTOR ========================== -->
@@ -70,6 +71,20 @@
                 <input type="number" id="edytorNowaIlosc" placeholder="Ilość">
             </div>
             <button onclick="dodajSkladnikEdytor()" class="btn-primary" style="width:100%">+ Dodaj składnik</button>
+        </div>
+
+        <div class="add-section">
+            <div class="add-section-title">Proces wytwarzania</div>
+            <textarea id="edytorProces" placeholder="Wpisz proces wytwarzania..." rows="5"></textarea>
+        </div>
+
+        <div class="add-section">
+            <div class="add-section-title">Notatki</div>
+            <div id="listaNotatek"></div>
+            <div class="add-row" style="margin-top:10px">
+                <input type="text" id="nowaNotatka" placeholder="Dodaj notatkę...">
+                <button onclick="dodajNotatke()" class="btn-primary">+</button>
+            </div>
         </div>
 
         <div class="button-group">
@@ -98,6 +113,11 @@
                 <input type="number" id="nowaIlosc" placeholder="Ilość">
             </div>
             <button onclick="dodajSkladnikNowejReceptury()" class="btn-primary" style="width:100%">+ Dodaj składnik</button>
+        </div>
+
+        <div class="add-section">
+            <div class="add-section-title">Proces wytwarzania</div>
+            <textarea id="nowyProces" placeholder="Wpisz proces wytwarzania..." rows="5"></textarea>
         </div>
     </div>
 

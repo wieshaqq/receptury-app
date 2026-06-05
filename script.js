@@ -168,6 +168,35 @@ function przelicz() {
         </table>
         <div class="wynik-suma">Suma: ${sumaKoncowa.toFixed(3)} kg</div>
     `;
+
+    // Pokaż proces i notatki w kalkulatorze
+    const procesWidok = document.getElementById("procesWidok");
+    if (procesWidok) {
+        const proces  = receptura.proces  || "";
+        const notatki = receptura.notatki || [];
+
+        let procesHTML = "";
+
+        if (proces) {
+            procesHTML += `
+                <div class="kalk-sekcja">
+                    <div class="kalk-sekcja-title">Proces wytwarzania</div>
+                    <div class="kalk-tekst">${proces.replace(/\n/g, "<br>")}</div>
+                </div>
+            `;
+        }
+
+        if (notatki.length > 0) {
+            procesHTML += `
+                <div class="kalk-sekcja">
+                    <div class="kalk-sekcja-title">Notatki</div>
+                    ${notatki.map(n => `<div class="kalk-notatka">• ${n}</div>`).join("")}
+                </div>
+            `;
+        }
+
+        procesWidok.innerHTML = procesHTML;
+    }
 }
 
 /* =========================
@@ -209,6 +238,13 @@ function pokazEdytor() {
     const kolor = Math.abs(suma - 100) < 0.01 ? "#4CAF50" : "#e05252";
     document.getElementById("sumaReceptury").innerHTML =
         `<strong style="color:${kolor}">Suma receptury: ${suma.toFixed(2)}</strong>`;
+
+    // Wypełnij pole procesu
+    const procesEl = document.getElementById("edytorProces");
+    if (procesEl) procesEl.value = receptura.proces || "";
+
+    // Pokaż notatki
+    pokazNotatki(wybor);
 }
 
 /* =========================
@@ -223,9 +259,64 @@ function zapiszRecepture() {
         receptura.skladniki[i].ilosc = isNaN(val) ? 0 : val;
     }
 
+    // Zapisz proces
+    const procesEl = document.getElementById("edytorProces");
+    if (procesEl) receptura.proces = procesEl.value;
+
     zapiszDoPamieci();
     pokazEdytor();
     przelicz();
+}
+
+/* =========================
+   NOTATKI
+========================= */
+function dodajNotatke() {
+    const wybor   = document.getElementById("produktEdytor").value;
+    const input   = document.getElementById("nowaNotatka");
+    const tekst   = input.value.trim();
+
+    if (!tekst) return;
+
+    const receptura = receptury[wybor];
+    if (!receptura.notatki) receptura.notatki = [];
+
+    receptura.notatki.push(tekst);
+    input.value = "";
+
+    zapiszDoPamieci();
+    pokazNotatki(wybor);
+}
+
+function usunNotatke(index) {
+    const wybor = document.getElementById("produktEdytor").value;
+    const receptura = receptury[wybor];
+
+    if (!confirm("Usunąć notatkę?")) return;
+
+    receptura.notatki.splice(index, 1);
+    zapiszDoPamieci();
+    pokazNotatki(wybor);
+}
+
+function pokazNotatki(wybor) {
+    const receptura = receptury[wybor];
+    const el = document.getElementById("listaNotatek");
+    if (!el) return;
+
+    const notatki = receptura.notatki || [];
+
+    if (notatki.length === 0) {
+        el.innerHTML = `<p class="notatki-empty">Brak notatek</p>`;
+        return;
+    }
+
+    el.innerHTML = notatki.map((n, i) => `
+        <div class="notatka-row">
+            <span>${n}</span>
+            <button onclick="usunNotatke(${i})">✕</button>
+        </div>
+    `).join("");
 }
 
 /* =========================
@@ -364,9 +455,13 @@ function dodajRecepture() {
 
     const key = nazwa.toLowerCase().replaceAll(" ", "_");
 
+    const nowyCProces = document.getElementById("nowyProces");
+
     receptury[key] = {
         nazwa,
-        skladniki: JSON.parse(JSON.stringify(nowaRecepturaSkladniki))
+        skladniki: JSON.parse(JSON.stringify(nowaRecepturaSkladniki)),
+        proces: nowyCProces ? nowyCProces.value.trim() : "",
+        notatki: []
     };
 
     // Nowa receptura nie ma jeszcze wersji bazowej
@@ -382,6 +477,7 @@ function dodajRecepture() {
     przelicz();
 
     document.getElementById("nowaReceptura").value = "";
+    if (document.getElementById("nowyProces")) document.getElementById("nowyProces").value = "";
     nowaRecepturaSkladniki = [];
     pokazNowaRecepture();
 
