@@ -120,6 +120,15 @@
 
         <div id="wynik"></div>
         <div id="procesWidok"></div>
+
+        <!-- Receptura bazowa — zwijana sekcja -->
+        <div class="bazowa-wrap" id="bazowa-wrap">
+            <button class="bazowa-toggle" onclick="toggleBazowa()">
+                <span>📋 Receptura bazowa</span>
+                <span class="bazowa-arrow" id="bazowa-arrow">▾</span>
+            </button>
+            <div class="bazowa-content hidden" id="bazowa-content"></div>
+        </div>
     </div>
 
     <!-- ========================= WIDOK: EDYTOR ========================== -->

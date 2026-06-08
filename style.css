@@ -886,3 +886,91 @@ td:nth-child(3) {
         padding: 9px 8px;
     }
 }
+
+/* =========================
+   RECEPTURA BAZOWA
+========================= */
+.bazowa-wrap {
+    margin-top: 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--bg-surface);
+}
+
+.bazowa-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    background: var(--bg-elevated);
+    border: none;
+    border-radius: 0;
+    color: var(--text-secondary);
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.bazowa-toggle:hover {
+    background: var(--accent-light);
+    color: var(--accent);
+}
+
+.bazowa-arrow {
+    font-size: 13px;
+    color: var(--text-muted);
+    transition: var(--transition);
+}
+
+.bazowa-content {
+    padding: 8px 0;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.bazowa-suma {
+    font-size: 11px;
+    color: var(--text-muted);
+    padding: 4px 14px 8px;
+    letter-spacing: 0.04em;
+}
+
+.bazowa-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 7px 14px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border-subtle);
+    transition: background var(--transition);
+}
+
+.bazowa-row:last-child {
+    border-bottom: none;
+}
+
+.bazowa-row:hover {
+    background: var(--accent-glow-sm);
+}
+
+.bazowa-nazwa {
+    color: var(--text-primary);
+}
+
+.bazowa-ilosc {
+    color: var(--accent);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    font-size: 12px;
+}
+
+.hint-text {
+    font-size: 13px;
+    color: var(--text-muted);
+    padding: 8px 0;
+}

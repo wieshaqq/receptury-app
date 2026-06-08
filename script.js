@@ -128,7 +128,8 @@ function przelicz() {
     const receptura = receptury[wybor];
 
     if (!kg || kg <= 0) {
-        wynikEl.innerHTML = "<p>Podaj poprawną ilość kg</p>";
+        wynikEl.innerHTML = "<p class='hint-text'>Podaj docelową masę aby przeliczyć</p>";
+        pokazBazowa(wybor);
         return;
     }
 
@@ -170,6 +171,9 @@ function przelicz() {
     `;
 
     // Pokaż proces i notatki w kalkulatorze
+    // Pokaż recepturę bazową
+    pokazBazowa(wybor);
+
     const procesWidok = document.getElementById("procesWidok");
     if (procesWidok) {
         const proces  = receptura.proces  || "";
@@ -544,6 +548,49 @@ function pokazWidok(widok) {
    START
 ========================= */
 init();
+
+/* =========================
+   RECEPTURA BAZOWA — KALKULATOR
+========================= */
+function pokazBazowa(wybor) {
+    const wrap    = document.getElementById("bazowa-wrap");
+    const content = document.getElementById("bazowa-content");
+    if (!wrap || !content) return;
+
+    const bazowa = recepturyBazowe[wybor];
+
+    if (!bazowa || !bazowa.skladniki || bazowa.skladniki.length === 0) {
+        wrap.style.display = "none";
+        return;
+    }
+
+    wrap.style.display = "block";
+
+    let rows = "";
+    for (const s of bazowa.skladniki) {
+        rows += `
+            <div class="bazowa-row">
+                <span class="bazowa-nazwa">${s.nazwa}</span>
+                <span class="bazowa-ilosc">${s.ilosc.toFixed(2)}%</span>
+            </div>
+        `;
+    }
+
+    content.innerHTML = `
+        <div class="bazowa-suma">Baza: ${bazowa.skladniki.reduce((a, s) => a + s.ilosc, 0).toFixed(2)} kg</div>
+        ${rows}
+    `;
+}
+
+function toggleBazowa() {
+    const content = document.getElementById("bazowa-content");
+    const arrow   = document.getElementById("bazowa-arrow");
+    if (!content) return;
+
+    const isHidden = content.classList.contains("hidden");
+    content.classList.toggle("hidden", !isHidden);
+    arrow.textContent = isHidden ? "▴" : "▾";
+}
 
 /* =========================
    SKAN — PODGLĄD ZDJĘCIA
