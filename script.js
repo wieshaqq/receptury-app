@@ -544,3 +544,38 @@ function pokazWidok(widok) {
    START
 ========================= */
 init();
+
+/* =========================
+   SKAN — PODGLĄD ZDJĘCIA
+========================= */
+function podgladZdjecia(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const status  = document.getElementById("scanStatus");
+    const podglad = document.getElementById("scanPodglad");
+
+    status.className = "";
+    status.textContent = "Zdjęcie załadowane — gotowe do skanowania";
+    status.className = "success";
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        podglad.innerHTML = `
+            <img src="${e.target.result}"
+                style="width:100%; border-radius:12px; margin-top:14px; border:1px solid var(--border);"
+                alt="Podgląd zdjęcia">
+            <button class="btn-primary btn-full" style="margin-top:10px" onclick="skanujZdjecie()">
+                🔍 Skanuj recepturę
+            </button>
+        `;
+    };
+    reader.readAsDataURL(file);
+}
+
+function skanujZdjecie() {
+    // Placeholder — podłączymy API jutro
+    const status = document.getElementById("scanStatus");
+    status.className = "";
+    status.textContent = "⏳ Skanowanie... (API zostanie podłączone wkrótce)";
+}
