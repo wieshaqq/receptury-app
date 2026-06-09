@@ -621,8 +621,99 @@ function podgladZdjecia(event) {
 }
 
 function skanujZdjecie() {
-    // Placeholder — podłączymy API jutro
-    const status = document.getElementById("scanStatus");
+    const status  = document.getElementById("scanStatus");
+    const input   = document.getElementById("scanInput");
+
+    if (!input.files[0]) {
+        status.className = "error";
+        status.textContent = "Najpierw wybierz zdjęcie";
+        return;
+    }
+
+    const file = input.files[0];
+
+    // Sprawdź rozmiar — max 5MB
+    if (file.size > 5 * 1024 * 1024) {
+        status.className = "error";
+        status.textContent = "Zdjęcie za duże — maksymalnie 5MB";
+        return;
+    }
+
     status.className = "";
-    status.textContent = "⏳ Skanowanie... (API zostanie podłączone wkrótce)";
+    status.textContent = "⏳ Analizuję zdjęcie...";
+
+    // Zablokuj przycisk
+    const btn = document.querySelector("#widok-skan .btn-primary:last-of-type");
+    if (btn) setLoading(btn, true);
+
+    const reader = new FileReader();
+
+    reader.onload = async (e) => {
+        // e.target.result to: "data:image/jpeg;base64,XXXX..."
+        const full       = e.target.result;
+        const mediaType  = full.split(";")[0].split(":")[1]; // "image/jpeg"
+        const imageBase64 = full.split(",")[1];              // sama base64
+
+        try {
+            const response = await fetch("/api/skan", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ imageBase64, mediaType })
+            });
+
+            const data = await response.json();
+
+            if (btn) setLoading(btn, false);
+
+            if (data.blad) {
+                status.className = "error";
+                status.textContent = "❌ " + data.blad;
+                return;
+            }
+
+            if (data.error) {
+                status.className = "error";
+                status.textContent = "❌ " + data.error;
+                return;
+            }
+
+            if (!data.nazwa || !data.skladniki || data.skladniki.length === 0) {
+                status.className = "error";
+                status.textContent = "❌ Nie udało się odczytać receptury";
+                return;
+            }
+
+            // Sukces — załaduj recepturę do nowej receptury
+            status.className = "success";
+            status.textContent = `✅ Odczytano: ${data.nazwa} (${data.skladniki.length} składników)`;
+
+            zaladujZeskanowaRecepture(data);
+
+        } catch (err) {
+            if (btn) setLoading(btn, false);
+            status.className = "error";
+            status.textContent = "❌ Błąd połączenia z serwerem";
+            console.error(err);
+        }
+    };
+
+    reader.readAsDataURL(file);
+}
+
+function zaladujZeskanowaRecepture(data) {
+    // Wypełnij widok nowej receptury zeskanowanymi danymi
+    document.getElementById("nowaReceptura").value = data.nazwa;
+
+    nowaRecepturaSkladniki = data.skladniki.map(s => ({
+        nazwa: s.nazwa,
+        ilosc: parseFloat(s.ilosc) || 0
+    }));
+
+    pokazNowaRecepture();
+    pokazWidok("nowa");
+
+    // Powiadom operatora
+    setTimeout(() => {
+        alert(`✅ Receptura "${data.nazwa}" została odczytana!\n\nSprawdź składniki i kliknij "Utwórz recepturę" żeby zapisać.`);
+    }, 300);
 }
