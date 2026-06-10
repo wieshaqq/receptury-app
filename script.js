@@ -12,7 +12,7 @@ let recepturyBazowe = {};
 let nowaRecepturaSkladniki = [];
 
 /* =========================
-   INIT — ładuje dane lub wgrywa defaults
+   INIT
 ========================= */
 async function init() {
     const zapisaneRobocze = localStorage.getItem(STORAGE_RECEPTURY);
@@ -40,7 +40,6 @@ async function init() {
     przelicz();
     pokazWidok("kalkulator");
 
-    // Schowaj splash, pokaż app
     const splash = document.getElementById("splash");
     const app    = document.getElementById("app");
     splash.classList.add("hidden");
@@ -48,7 +47,7 @@ async function init() {
 }
 
 /* =========================
-   BUTTON LOADING HELPERS
+   BUTTON LOADING
 ========================= */
 function setLoading(btn, loading) {
     if (loading) {
@@ -59,25 +58,6 @@ function setLoading(btn, loading) {
         btn.textContent = btn.dataset.originalText || btn.textContent;
         btn.classList.remove("loading");
     }
-}
-
-/* =========================
-   SKELETON LOADER
-========================= */
-function pokazSkeleton(rows = 5) {
-    let html = "";
-    for (let i = 0; i < rows; i++) {
-        const w1 = 60 + Math.floor(Math.random() * 30);
-        const w2 = 50 + Math.floor(Math.random() * 30);
-        html += `
-            <div class="skeleton-row">
-                <div class="skeleton" style="width:${w1}%"></div>
-                <div class="skeleton" style="width:${w2}%"></div>
-                <div class="skeleton" style="width:40%"></div>
-            </div>
-        `;
-    }
-    document.getElementById("wynik").innerHTML = `<div style="margin-top:16px">${html}</div>`;
 }
 
 /* =========================
@@ -107,7 +87,6 @@ function initSelect() {
         select2.innerHTML += option;
     }
 
-    // Zachowaj poprzedni wybór jeśli nadal istnieje
     if (receptury[prev1]) select1.value = prev1;
     if (receptury[prev2]) select2.value = prev2;
 }
@@ -116,8 +95,8 @@ function initSelect() {
    PRZELICZANIE
 ========================= */
 function przelicz() {
-    const kg     = parseFloat(document.getElementById("iloscKg").value);
-    const wybor  = document.getElementById("produkt").value;
+    const kg      = parseFloat(document.getElementById("iloscKg").value);
+    const wybor   = document.getElementById("produkt").value;
     const wynikEl = document.getElementById("wynik");
 
     if (!wybor || !receptury[wybor]) {
@@ -138,8 +117,8 @@ function przelicz() {
 
     const mnoznik = kg / sumaBazowa;
     let sumaKoncowa = 0;
-
     let rows = "";
+
     for (let s of receptura.skladniki) {
         const nowaIlosc = s.ilosc * mnoznik;
         sumaKoncowa += nowaIlosc;
@@ -170,15 +149,12 @@ function przelicz() {
         <div class="wynik-suma">Suma: ${sumaKoncowa.toFixed(3)} kg</div>
     `;
 
-    // Pokaż proces i notatki w kalkulatorze
-    // Pokaż recepturę bazową
     pokazBazowa(wybor);
 
     const procesWidok = document.getElementById("procesWidok");
     if (procesWidok) {
         const proces  = receptura.proces  || "";
         const notatki = receptura.notatki || [];
-
         let procesHTML = "";
 
         if (proces) {
@@ -222,16 +198,10 @@ function pokazEdytor() {
     for (let i = 0; i < receptura.skladniki.length; i++) {
         const s = receptura.skladniki[i];
         suma += s.ilosc;
-
         html += `
             <div class="skladnik-row">
                 <span>${s.nazwa}</span>
-                <input
-                    type="number"
-                    id="skladnik-${i}"
-                    value="${s.ilosc}"
-                    step="0.01"
-                >
+                <input type="number" id="skladnik-${i}" value="${s.ilosc}" step="0.01">
                 <button onclick="usunSkladnik(${i})">✕</button>
             </div>
         `;
@@ -239,15 +209,13 @@ function pokazEdytor() {
 
     document.getElementById("edytor").innerHTML = html;
 
-    const kolor = Math.abs(suma - 100) < 0.01 ? "#4CAF50" : "#e05252";
+    const kolor = Math.abs(suma - 100) < 0.01 ? "#16a34a" : "#dc2626";
     document.getElementById("sumaReceptury").innerHTML =
         `<strong style="color:${kolor}">Suma receptury: ${suma.toFixed(2)}</strong>`;
 
-    // Wypełnij pole procesu
     const procesEl = document.getElementById("edytorProces");
     if (procesEl) procesEl.value = receptura.proces || "";
 
-    // Pokaż notatki
     pokazNotatki(wybor);
 }
 
@@ -263,7 +231,6 @@ function zapiszRecepture() {
         receptura.skladniki[i].ilosc = isNaN(val) ? 0 : val;
     }
 
-    // Zapisz proces
     const procesEl = document.getElementById("edytorProces");
     if (procesEl) receptura.proces = procesEl.value;
 
@@ -293,7 +260,7 @@ function dodajNotatke() {
 }
 
 function usunNotatke(index) {
-    const wybor = document.getElementById("produktEdytor").value;
+    const wybor     = document.getElementById("produktEdytor").value;
     const receptura = receptury[wybor];
 
     if (!confirm("Usunąć notatkę?")) return;
@@ -305,7 +272,7 @@ function usunNotatke(index) {
 
 function pokazNotatki(wybor) {
     const receptura = receptury[wybor];
-    const el = document.getElementById("listaNotatek");
+    const el        = document.getElementById("listaNotatek");
     if (!el) return;
 
     const notatki = receptura.notatki || [];
@@ -329,14 +296,9 @@ function pokazNotatki(wybor) {
 function zapiszJakoBazowa() {
     const wybor = document.getElementById("produktEdytor").value;
 
-    // Najpierw zapisz aktualne zmiany
     zapiszRecepture();
 
-    const potwierdzenie = confirm(
-        `Zapisać "${receptury[wybor].nazwa}" jako wersję bazową?\nTo nadpisze poprzednią bazę tej receptury.`
-    );
-
-    if (!potwierdzenie) return;
+    if (!confirm(`Zapisać "${receptury[wybor].nazwa}" jako wersję bazową?\nTo nadpisze poprzednią bazę tej receptury.`)) return;
 
     recepturyBazowe[wybor] = JSON.parse(JSON.stringify(receptury[wybor]));
     zapiszDoPamieci();
@@ -354,11 +316,7 @@ function przywrocRecepture() {
         return;
     }
 
-    const potwierdzenie = confirm(
-        `Przywrócić "${receptury[wybor].nazwa}" do wersji bazowej?`
-    );
-
-    if (!potwierdzenie) return;
+    if (!confirm(`Przywrócić "${receptury[wybor].nazwa}" do wersji bazowej?`)) return;
 
     receptury[wybor] = JSON.parse(JSON.stringify(recepturyBazowe[wybor]));
     zapiszDoPamieci();
@@ -406,7 +364,7 @@ function usunSkladnik(index) {
 }
 
 /* =========================
-   NOWA RECEPTURA
+   NOWA RECEPTURA — PODGLĄD
 ========================= */
 function pokazNowaRecepture() {
     let html = "";
@@ -457,19 +415,15 @@ function dodajRecepture() {
         return;
     }
 
-    const key = nazwa.toLowerCase().replaceAll(" ", "_");
-
-    const nowyCProces = document.getElementById("nowyProces");
+    const key       = nazwa.toLowerCase().replaceAll(" ", "_");
+    const procesEl  = document.getElementById("nowyProces");
 
     receptury[key] = {
         nazwa,
         skladniki: JSON.parse(JSON.stringify(nowaRecepturaSkladniki)),
-        proces: nowyCProces ? nowyCProces.value.trim() : "",
-        notatki: []
+        proces:    procesEl ? procesEl.value.trim() : "",
+        notatki:   []
     };
-
-    // Nowa receptura nie ma jeszcze wersji bazowej
-    // Użytkownik może ją zapisać jako bazową w edytorze
 
     zapiszDoPamieci();
     initSelect();
@@ -480,8 +434,9 @@ function dodajRecepture() {
     pokazEdytor();
     przelicz();
 
+    // Wyczyść formularz
     document.getElementById("nowaReceptura").value = "";
-    if (document.getElementById("nowyProces")) document.getElementById("nowyProces").value = "";
+    if (procesEl) procesEl.value = "";
     nowaRecepturaSkladniki = [];
     pokazNowaRecepture();
 
@@ -516,11 +471,9 @@ function usunRecepture() {
 ========================= */
 function zmienProdukt(zrodlo) {
     if (zrodlo === "kalkulator") {
-        const val = document.getElementById("produkt").value;
-        document.getElementById("produktEdytor").value = val;
+        document.getElementById("produktEdytor").value = document.getElementById("produkt").value;
     } else {
-        const val = document.getElementById("produktEdytor").value;
-        document.getElementById("produkt").value = val;
+        document.getElementById("produkt").value = document.getElementById("produktEdytor").value;
     }
 
     pokazEdytor();
@@ -545,12 +498,7 @@ function pokazWidok(widok) {
 }
 
 /* =========================
-   START
-========================= */
-init();
-
-/* =========================
-   RECEPTURA BAZOWA — KALKULATOR
+   RECEPTURA BAZOWA
 ========================= */
 function pokazBazowa(wybor) {
     const wrap    = document.getElementById("bazowa-wrap");
@@ -602,9 +550,8 @@ function podgladZdjecia(event) {
     const status  = document.getElementById("scanStatus");
     const podglad = document.getElementById("scanPodglad");
 
-    status.className = "";
-    status.textContent = "Zdjęcie załadowane — gotowe do skanowania";
     status.className = "success";
+    status.textContent = "Zdjęcie załadowane — gotowe do skanowania";
 
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -620,9 +567,12 @@ function podgladZdjecia(event) {
     reader.readAsDataURL(file);
 }
 
+/* =========================
+   SKAN — WYSYŁANIE DO AI
+========================= */
 function skanujZdjecie() {
-    const status  = document.getElementById("scanStatus");
-    const input   = document.getElementById("scanInput");
+    const status = document.getElementById("scanStatus");
+    const input  = document.getElementById("scanInput");
 
     if (!input.files[0]) {
         status.className = "error";
@@ -632,7 +582,6 @@ function skanujZdjecie() {
 
     const file = input.files[0];
 
-    // Sprawdź rozmiar — max 5MB
     if (file.size > 5 * 1024 * 1024) {
         status.className = "error";
         status.textContent = "Zdjęcie za duże — maksymalnie 5MB";
@@ -642,38 +591,30 @@ function skanujZdjecie() {
     status.className = "";
     status.textContent = "⏳ Analizuję zdjęcie...";
 
-    // Zablokuj przycisk
     const btn = document.querySelector("#widok-skan .btn-primary:last-of-type");
     if (btn) setLoading(btn, true);
 
     const reader = new FileReader();
 
     reader.onload = async (e) => {
-        // e.target.result to: "data:image/jpeg;base64,XXXX..."
-        const full       = e.target.result;
-        const mediaType  = full.split(";")[0].split(":")[1]; // "image/jpeg"
-        const imageBase64 = full.split(",")[1];              // sama base64
+        const full        = e.target.result;
+        const mediaType   = full.split(";")[0].split(":")[1];
+        const imageBase64 = full.split(",")[1];
 
         try {
             const response = await fetch("/api/skan", {
-                method: "POST",
+                method:  "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ imageBase64, mediaType })
+                body:    JSON.stringify({ imageBase64, mediaType })
             });
 
             const data = await response.json();
 
             if (btn) setLoading(btn, false);
 
-            if (data.blad) {
+            if (data.blad || data.error) {
                 status.className = "error";
-                status.textContent = "❌ " + data.blad;
-                return;
-            }
-
-            if (data.error) {
-                status.className = "error";
-                status.textContent = "❌ " + data.error;
+                status.textContent = "❌ " + (data.blad || data.error);
                 return;
             }
 
@@ -683,11 +624,10 @@ function skanujZdjecie() {
                 return;
             }
 
-            // Sukces — załaduj recepturę do nowej receptury
             status.className = "success";
             status.textContent = `✅ Odczytano: ${data.nazwa} (${data.skladniki.length} składników)`;
 
-            zaladujZeskanowaRecepture(data);
+            zapiszZeskanowaRecepture(data);
 
         } catch (err) {
             if (btn) setLoading(btn, false);
@@ -700,20 +640,42 @@ function skanujZdjecie() {
     reader.readAsDataURL(file);
 }
 
-function zaladujZeskanowaRecepture(data) {
-    // Wypełnij widok nowej receptury zeskanowanymi danymi
-    document.getElementById("nowaReceptura").value = data.nazwa;
+/* =========================
+   SKAN — ZAPIS DO PAMIECI
+========================= */
+function zapiszZeskanowaRecepture(data) {
+    // Generuj unikalny klucz
+    const key = data.nazwa.toLowerCase().replaceAll(" ", "_") + "_" + Date.now();
 
-    nowaRecepturaSkladniki = data.skladniki.map(s => ({
-        nazwa: s.nazwa,
-        ilosc: parseFloat(s.ilosc) || 0
-    }));
+    // Zapisz recepturę od razu do localStorage
+    receptury[key] = {
+        nazwa:     data.nazwa,
+        skladniki: data.skladniki.map(s => ({
+            nazwa: s.nazwa,
+            ilosc: parseFloat(s.ilosc) || 0
+        })),
+        proces:  "",
+        notatki: []
+    };
 
-    pokazNowaRecepture();
-    pokazWidok("nowa");
+    zapiszDoPamieci();
+    initSelect();
+
+    // Przełącz na edytor żeby operator mógł sprawdzić i poprawić
+    document.getElementById("produkt").value       = key;
+    document.getElementById("produktEdytor").value = key;
+
+    pokazEdytor();
+    przelicz();
+    pokazWidok("edytor");
 
     // Powiadom operatora
     setTimeout(() => {
-        alert(`✅ Receptura "${data.nazwa}" została odczytana!\n\nSprawdź składniki i kliknij "Utwórz recepturę" żeby zapisać.`);
+        alert(`✅ Receptura "${data.nazwa}" została zapisana!\n\nMożesz teraz sprawdzić składniki i edytować.\nNie zapomnij kliknąć "Zapisz jako bazową" gdy wszystko się zgadza.`);
     }, 300);
 }
+
+/* =========================
+   START
+========================= */
+init();

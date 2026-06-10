@@ -4,8 +4,6 @@ const dotenv  = require("dotenv");
 
 dotenv.config();
 
-console.log("Klucz:", process.env.ANTHROPIC_API_KEY?.substring(0, 15));
-
 const app  = express();
 const PORT = 3000;
 
@@ -17,7 +15,6 @@ app.use(express.static("."));
    ENDPOINT: SKAN ZDJĘCIA
 ========================= */
 app.post("/api/skan", async (req, res) => {
-    console.log("Zapytanie otrzymane, mediaType:", req.body?.mediaType?.substring(0,20));
     const { imageBase64, mediaType } = req.body;
 
     if (!imageBase64 || !mediaType) {
@@ -26,16 +23,16 @@ app.post("/api/skan", async (req, res) => {
 
     try {
         const apiKey = process.env.ANTHROPIC_API_KEY.trim();
-console.log("Wysyłam klucz:", JSON.stringify(apiKey.substring(0, 20)), "długość:", apiKey.length);
+
         const response = await fetch("https://api.anthropic.com/v1/messages", {
             method: "POST",
             headers: {
                 "Content-Type":      "application/json",
-                "x-api-key": apiKey,
+                "x-api-key":         apiKey,
                 "anthropic-version": "2023-06-01"
             },
             body: JSON.stringify({
-                model: "claude-haiku-4-5-20251001",
+                model:      "claude-haiku-4-5-20251001",
                 max_tokens: 1024,
                 messages: [
                     {
@@ -76,19 +73,11 @@ Jeśli nie możesz odczytać receptury — zwróć { "blad": "opis problemu" }.`
             return res.status(500).json({ error: data.error?.message || "Błąd API" });
         }
 
-        const text = data.content[0].text;
-console.log("Odpowiedź AI:", text);
+        const text  = data.content[0].text;
+        const clean = text.replace(/```json|```/g, "").trim();
 
-const clean = text.replace(/```json|```/g, "").trim();
-
-try {
-    const parsed = JSON.parse(clean);
-    res.json(parsed);
-} catch {
-    res.status(500).json({ error: "Nie udało się sparsować odpowiedzi AI", raw: text });
-}
         try {
-            const parsed = JSON.parse(text);
+            const parsed = JSON.parse(clean);
             res.json(parsed);
         } catch {
             res.status(500).json({ error: "Nie udało się sparsować odpowiedzi AI", raw: text });
