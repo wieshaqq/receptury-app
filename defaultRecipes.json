@@ -1,29 +1,12 @@
 {
-    "stonka": {
-        "nazwa": "Szampon Stonka",
-        "skladniki": [
-            { "nazwa": "Woda", "ilosc": 51.63 },
-            { "nazwa": "AVG", "ilosc": 1.00 },
-            { "nazwa": "GR", "ilosc": 2.50 },
-            { "nazwa": "C34", "ilosc": 0.50 },
-            { "nazwa": "JC16", "ilosc": 0.10 },
-            { "nazwa": "T30", "ilosc": 25.00 },
-            { "nazwa": "Ch", "ilosc": 3.00 },
-            { "nazwa": "SzugaN", "ilosc": 8.00 },
-            { "nazwa": "DP", "ilosc": 0.10 },
-            { "nazwa": "AP", "ilosc": 2.00 },
-            { "nazwa": "RT", "ilosc": 4.00 },
-            { "nazwa": "Stonka", "ilosc": 0.40 },
-            { "nazwa": "EXK7", "ilosc": 1.50 },
-            { "nazwa": "KC", "ilosc": 0.27 }
-        ]
-    },
     "testowy": {
         "nazwa": "Produkt Testowy",
         "skladniki": [
             { "nazwa": "Woda", "ilosc": 60.00 },
             { "nazwa": "Substancja X", "ilosc": 10.00 },
             { "nazwa": "Substancja Y", "ilosc": 5.00 }
-        ]
+        ],
+        "proces": "",
+        "notatki": []
     }
 }
